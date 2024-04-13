@@ -25,11 +25,13 @@ Cortical and subcortical brain atlases were visualized using the ggseg package. 
 
 ### Datasets
 
-We used the ADNI dataset in our study. ADNI data are available through an access procedure described at [http://adni.loni.usc.edu/data-samples/ access-data/](http://adni.loni.usc.edu/data-samples/ access-data/).
+We used the ADNI dataset in our study. ADNI data are available through an access procedure described at [http://adni.loni.usc.edu/data-samples/access-data/](http://adni.loni.usc.edu/data-samples/access-data/).
 
 ### Feature extraction
 
-We used preprocessed brain regions’ volumes from the T1-weighted MRI images. These brain region volumes were preprocessed through the FreeSurfer software (version 5.1). The cortical surface of each hemisphere was parcellated according to the Desikan–Killiany atlas and anatomical volumetric measures were obtained via a whole-brain segmentation procedure. The final data included cortical regions(32 per hemisphere) and 24 subcortical regions (12 per hemisphere). 
+We used preprocessed regional brain volumes extracted from T1-weighted MRI scans and regional Standardized Uptake Value Ratio (SUVR) values extracted from AV45 Amyloid PET scans as the two input modalities for our model (Figure 1). For both T1-weighted MRI and and AV45 Amyloid scans, the cortical surface of each hemisphere was parcellated according to the Desikan–Killiany atlas and anatomical volumetric measures were obtained via a whole-brain segmentation procedure. The final data included cortical regions(32 per hemisphere) and 24 subcortical regions (12 per hemisphere). 
+
+**ATN_data_extraction.py** and **ADNI_fine_tuning.py** scripts implement the complete feature extraction process including preparing data for training and evaluation.
 
 ## Model training
 
@@ -37,8 +39,9 @@ We used preprocessed brain regions’ volumes from the T1-weighted MRI images. T
   
 - **multimodal_VAE.py** - Implements the architecture for mmVAE MOPOE including the modality-specific encoders and decoders, Product-of-Experts (PoE), and multimodal ELBO loss functions
   
-- **training.py** - Training all models including proposed method and baselines as shown in Table 1.
+- **training.py** - Training all models including proposed method and baselines as shown in Table 1. Model configurations for multimodal and unimodal VAEs are available in the configs folder.
 
+All models were trained using Adam optimizer with hyperparameters as follows: epochs = 500, learning rate = 10^−5, batch size = 64 and latent dimensions in the range [5,10,15,20]. The encoder and decoder networks have 2 fully-connected layers of sizes 64, 32 and 32, 64 respectively.
 
 ## Performance evaluation
 
@@ -50,15 +53,15 @@ We used preprocessed brain regions’ volumes from the T1-weighted MRI images. T
 
 <img align="center" width="70%" height="100%" src="Plots/sig_ratio.png"> 
 
-Fig 1. Likelihood ratio calculated for Dml, Dmf (ADNI)
+Fig 1. Likelihood ratio calculated for D~ml~ (multimodal latent deviations) and D~mf~ (multimodal feature deviations)
 
 <img align="center" width="65%" height="100%" src="Plots/clinical_validation.png"> 
 
-Fig. 2. **Left**: Box plot showing the latent deviations Dml across cognitively unimpaired (CU) subjects and the AD groups (in order of severity). Statistical annotations: ns: not significant, 0.05 < p <= 1: *,0.01 < p <= 0.05: **, 0.001 < p < 0.01: ***, p < 0.001. **Right**: Association between Dml and cognition scores (ADAS). Each point in the plot represents a subject and the red line denotes the linear regression fit of the points, adjusted by age and sex.
+Fig. 2. **Left**: Box plot showing the latent deviations D~ml~ across cognitively unimpaired (CU) subjects and the AD groups (in order of severity). Statistical annotations: ns: not significant, 0.05 < p <= 1: *,0.01 < p <= 0.05: **, 0.001 < p < 0.01: ***, p < 0.001. **Right**: Association between Dml and cognition scores (ADAS). Each point in the plot represents a subject and the red line denotes the linear regression fit of the points, adjusted by age and sex.
 
 <img align="center" width="65%" height="100%" src="Plots/interpret.png"> 
 
-Fig 3. **Left**: Latent dimensions (4,5 and 7) with statistically significant deviations (mean absolute Zml > 1.96 or p < 0.05). The dotted red line indicates Z > 1.96. Latent dimensions above the dotted line were used for mapping to feature-space deviations. **Right**: Effect size maps showing the region-level pairwise group differences in Zmf between control subjects and each of the AD stages for both the modalities. The color bar represents the Cohen’s d statistic effect size (0.5 is considered a small effect, 1.5 a medium effect and 2.5 a large effect). Gray regions represent that no participants have statistically significant deviations after False Discovery Rate (FDR) correction.
+Fig 3. **Left**: Latent dimensions (4,5 and 7) with statistically significant deviations (mean absolute Z~ml~ > 1.96 or p < 0.05). The dotted red line indicates Z > 1.96. Latent dimensions above the dotted line were used for mapping to feature-space deviations. **Right**: Effect size maps showing the region-level pairwise group differences in Zmf between control subjects and each of the AD stages for both the modalities. The color bar represents the Cohen’s d statistic effect size (0.5 is considered a small effect, 1.5 a medium effect and 2.5 a large effect). Gray regions represent that no participants have statistically significant deviations after False Discovery Rate (FDR) correction.
 
 
 ## Acknowledgement
