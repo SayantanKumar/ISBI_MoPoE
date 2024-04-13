@@ -1,7 +1,7 @@
 # Overview
 This repository contains official implementation for our paper titled "Improving Normative Modeling for Multi-modal Neuroimaging Data using mixture-of-product-of-experts variational autoencoders", accepted in IEEE International Symposium in Biomedical Imaging (IEEE ISBI 2024). [[ArXiV](https://arxiv.org/pdf/2312.00992.pdf)]
 
-<img align="center" width="65%" height="80%" src="Plots/workflow.png"> 
+<img align="center" width="60%" height="80%" src="Plots/workflow.png"> 
 
 Figure 1:  Proposed MoPoE normative modelling framework
 
@@ -33,9 +33,18 @@ We used preprocessed brain regions’ volumes from the T1-weighted MRI images. T
 
 
 ## Performance Evaluation
+
+<img align="center" width="65%" height="100%" src="Plots/sig_ratio.png"> 
+
+Fig 1. Likelihood ratio calculated for Dml, Dmf (ADNI)
+
 <img align="center" width="65%" height="100%" src="Plots/clinical_validation.png"> 
 
-<img align="center" width="65%" height="100%" src="Plots/interpretability.png"> 
+Fig. 2. Left: Box plot showing the latent deviations Dml across cognitively unimpaired (CU) subjects and the AD groups (in order of severity). Statistical annotations: ns: not significant, 0.05 < p <= 1: *,0.01 < p <= 0.05: **, 0.001 < p < 0.01: ***, p < 0.001. Right: Association between Dml and cognition scores (ADAS). Each point in the plot represents a subject and the red line denotes the linear regression fit of the points, adjusted by age and sex.
+
+<img align="center" width="65%" height="100%" src="Plots/interpret.png"> 
+
+Fig 3. **Left**: Latent dimensions (4,5 and 7) with statistically significant deviations (mean absolute Zml > 1.96 or p < 0.05). The dotted red line indicates Z > 1.96. Latent dimensions above the dotted line were used for mapping to feature-space deviations. **Right**: Effect size maps showing the region-level pairwise group differences in Zmf between control subjects and each of the AD stages for both the modalities. The color bar represents the Cohen’s d statistic effect size (0.5 is considered a small effect, 1.5 a medium effect and 2.5 a large effect). Gray regions represent that no participants have statistically significant deviations after False Discovery Rate (FDR) correction.
 
 
 ## Acknowledgement
