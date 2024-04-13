@@ -17,7 +17,7 @@ We recommend an environment with python >= 3.7 and pytorch >= 1.10.2, and then i
 ```
 pip install -r requirements.txt
 ```
-All models were implemented using the multi-view-AE package developed by Aguila, Ana Lawry, et al [Multi-view-AE: A Python package for multi-view autoencoder models](https://joss.theoj.org/papers/10.21105/joss.05093).
+All models were implemented using the multi-view-AE package developed by Aguila, Ana Lawry, et al [Multi-view-AE: A Python package for multi-view autoencoder models](https://joss.theoj.org/papers/10.21105/joss.05093). The source code of the paper can be found in the folder named multi-view-AE.
 
 Cortical and subcortical brain atlases were visualized using the ggseg package. The original R implementation can be found [here](https://github.com/ggseg/ggseg). A more recent Python implementation can also be found [here](https://github.com/ggseg/python-ggseg).
 
@@ -31,16 +31,30 @@ We used the ADNI dataset in our study. ADNI data are available through an access
 
 We used preprocessed brain regions’ volumes from the T1-weighted MRI images. These brain region volumes were preprocessed through the FreeSurfer software (version 5.1). The cortical surface of each hemisphere was parcellated according to the Desikan–Killiany atlas and anatomical volumetric measures were obtained via a whole-brain segmentation procedure. The final data included cortical regions(32 per hemisphere) and 24 subcortical regions (12 per hemisphere). 
 
+## Model training
 
-## Performance Evaluation
+- **dataloaders.py** - Dataloader functions for train, test and validation splits
+  
+- **multimodal_VAE.py** - Implements the architecture for mmVAE MOPOE including the modality-specific encoders and decoders, Product-of-Experts (PoE), and multimodal ELBO loss functions
+  
+- **training.py** - Training all models including proposed method and baselines as shown in Table 1.
 
-<img align="center" width="65%" height="100%" src="Plots/sig_ratio.png"> 
+
+## Performance evaluation
+
+- Evaluating outlier detection performance (likelihood ratio) - **sig_ratio.py**
+    
+- Clinical validation of latent deviations - **clinical_validation.py**
+  
+- Interpretability analysis - **interpretability.py**
+
+<img align="center" width="70%" height="100%" src="Plots/sig_ratio.png"> 
 
 Fig 1. Likelihood ratio calculated for Dml, Dmf (ADNI)
 
 <img align="center" width="65%" height="100%" src="Plots/clinical_validation.png"> 
 
-Fig. 2. Left: Box plot showing the latent deviations Dml across cognitively unimpaired (CU) subjects and the AD groups (in order of severity). Statistical annotations: ns: not significant, 0.05 < p <= 1: *,0.01 < p <= 0.05: **, 0.001 < p < 0.01: ***, p < 0.001. Right: Association between Dml and cognition scores (ADAS). Each point in the plot represents a subject and the red line denotes the linear regression fit of the points, adjusted by age and sex.
+Fig. 2. **Left**: Box plot showing the latent deviations Dml across cognitively unimpaired (CU) subjects and the AD groups (in order of severity). Statistical annotations: ns: not significant, 0.05 < p <= 1: *,0.01 < p <= 0.05: **, 0.001 < p < 0.01: ***, p < 0.001. **Right**: Association between Dml and cognition scores (ADAS). Each point in the plot represents a subject and the red line denotes the linear regression fit of the points, adjusted by age and sex.
 
 <img align="center" width="65%" height="100%" src="Plots/interpret.png"> 
 
@@ -49,8 +63,7 @@ Fig 3. **Left**: Latent dimensions (4,5 and 7) with statistically significant de
 
 ## Acknowledgement
 
-The preparation of this report was supported by the Centene Corporation contract (P19-00559) for the Washington University-Centene ARCH Personalized Medicine Initiative and the National Institutes of Health (NIH) (R01-AG067103). Computations were performed using the facilities of the Washington University Research Computing and Informatics Facility, which were partially funded by NIH grants S10OD025200, 1S10RR022984-01A1 and 1S10OD018091-
-01. Additional support is provided The McDonnell Center for Systems Neuroscience
+The preparation of this report was supported by the Centene Corporation contract (P19-00559) for the Washington University-Centene ARCH Personalized Medicine Initiative and the National Institutes of Health (NIH) (R01-AG067103). Computations were performed using the facilities of the Washington University Research Computing and Informatics Facility, which were partially funded by NIH grants S10OD025200, 1S10RR022984-01A1 and 1S10OD018091-01. Additional support is provided The McDonnell Center for Systems Neuroscience
   
 ## Citation
 If you find our work is useful in your research, please consider raising a star  :star:  and citing:
